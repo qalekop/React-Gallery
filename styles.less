@@ -1,28 +1,36 @@
 @button-color: gray;
+@button-color-hover: #B2CCCC;
 @image-height: image-height("./public/assets/gallery/p1000101.jpg");
 @button-size: 50px;
 @shadow-size: 20px;
 
 .container {
-	max-width: 980px;
-	text-align: center;
-	margin: 20px auto;
+  max-width: 980px;
+  text-align: center;
+  margin: 20px auto;
 }
 
-#triangle-common {
-	margin-top: (@image-height - @button-size) / 2;
-	border-top: (@button-size / 2) solid transparent;
-	border-bottom: (@button-size / 2) solid transparent;
+.triangle-common {
+  margin-top: (@image-height - @button-size) / 2;
+  border-top: (@button-size / 2) solid transparent;
+  border-bottom: (@button-size / 2) solid transparent;
 }
 
-#triangle-left {
-	border-right: @button-size solid @button-color;
-	#triangle-common;
+.triangle-left {
+  border-right: @button-size solid @button-color;
 }
 
-#triangle-right {
-	border-left: @button-size solid @button-color;
-	#triangle-common;
+.triangle-right {
+  border-left: @button-size solid @button-color;
+}
+.triangle-left:hover {
+  border-right: @button-size solid @button-color-hover;
+  cursor: pointer;
+}
+
+.triangle-right:hover {
+  border-left: @button-size solid @button-color-hover;
+  cursor: pointer;
 }
 
 .container img {

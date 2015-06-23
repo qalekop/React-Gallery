@@ -3,23 +3,25 @@
   text-align: center;
   margin: 20px auto;
 }
-#triangle-common {
+.triangle-common {
   margin-top: 115.5px;
   border-top: 25px solid transparent;
   border-bottom: 25px solid transparent;
 }
-#triangle-left {
+.triangle-left {
   border-right: 50px solid gray;
-  margin-top: 115.5px;
-  border-top: 25px solid transparent;
-  border-bottom: 25px solid transparent;
 }
-#triangle-right {
+.triangle-right {
   border-left: 50px solid gray;
-  margin-top: 115.5px;
-  border-top: 25px solid transparent;
-  border-bottom: 25px solid transparent;
+}
+.triangle-left:hover {
+  border-right: 50px solid #b2cccc;
+  cursor: pointer;
+}
+.triangle-right:hover {
+  border-left: 50px solid #b2cccc;
+  cursor: pointer;
 }
 .container img {
-  box-shadow: -5px 5px 10px -5px rgba(0, 0, 0, 0.75);
+  box-shadow: -10px 10px 20px -10px rgba(0, 0, 0, 0.75);
 }

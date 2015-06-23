@@ -7,9 +7,13 @@
   "scripts": {
     "build": "browserify -t [ reactify --es6 ] main.js > ./public/assets/js/compiled.js"
   },
-  "author": "akopylov",
+  "author": "qalekop",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.11.0",
+    "exif-parser": "*",
+    "googlemaps": "*",
+    "async": "*",
     "react": "^0.13.2"
   },
   "devDependencies": {
