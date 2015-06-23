@@ -1,0 +1,25 @@
+.container {
+  max-width: 980px;
+  text-align: center;
+  margin: 20px auto;
+}
+#triangle-common {
+  margin-top: 115.5px;
+  border-top: 25px solid transparent;
+  border-bottom: 25px solid transparent;
+}
+#triangle-left {
+  border-right: 50px solid gray;
+  margin-top: 115.5px;
+  border-top: 25px solid transparent;
+  border-bottom: 25px solid transparent;
+}
+#triangle-right {
+  border-left: 50px solid gray;
+  margin-top: 115.5px;
+  border-top: 25px solid transparent;
+  border-bottom: 25px solid transparent;
+}
+.container img {
+  box-shadow: -5px 5px 10px -5px rgba(0, 0, 0, 0.75);
+}

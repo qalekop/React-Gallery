@@ -1,0 +1,21 @@
+{
+  "name": "react-gallery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "build": "browserify -t [ reactify --es6 ] main.js > ./public/assets/js/compiled.js"
+  },
+  "author": "akopylov",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^0.13.2"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.8",
+    "reactify": "^1.1.0",
+    "uglify-js": "^2.4.20",
+    "watchify": "^3.1.2"
+  }
+}

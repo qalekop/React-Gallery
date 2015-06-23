@@ -1,0 +1,30 @@
+@button-color: gray;
+@image-height: image-height("./public/assets/gallery/p1000101.jpg");
+@button-size: 50px;
+@shadow-size: 20px;
+
+.container {
+	max-width: 980px;
+	text-align: center;
+	margin: 20px auto;
+}
+
+#triangle-common {
+	margin-top: (@image-height - @button-size) / 2;
+	border-top: (@button-size / 2) solid transparent;
+	border-bottom: (@button-size / 2) solid transparent;
+}
+
+#triangle-left {
+	border-right: @button-size solid @button-color;
+	#triangle-common;
+}
+
+#triangle-right {
+	border-left: @button-size solid @button-color;
+	#triangle-common;
+}
+
+.container img {
+  box-shadow: -@shadow-size/2 @shadow-size/2 @shadow-size -@shadow-size/2 rgba(0,0,0,0.75);
+}
