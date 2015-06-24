@@ -1,6 +1,7 @@
 @button-color: gray;
 @button-color-hover: #B2CCCC;
 @image-height: image-height("./public/assets/gallery/p1000101.jpg");
+@image-width: image-width("./public/assets/gallery/p1000101.jpg");
 @button-size: 50px;
 @shadow-size: 20px;
 
@@ -8,6 +9,13 @@
   max-width: 980px;
   text-align: center;
   margin: 20px auto;
+}
+
+.image-holder p {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1000;
 }
 
 .triangle-common {
@@ -33,6 +41,6 @@
   cursor: pointer;
 }
 
-.container img {
+.image-holder img {
   box-shadow: -@shadow-size/2 @shadow-size/2 @shadow-size -@shadow-size/2 rgba(0,0,0,0.75);
 }

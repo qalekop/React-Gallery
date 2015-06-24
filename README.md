@@ -9,5 +9,7 @@ React.js playground. Scenario is as follows:
 
 Client side is built upon react.js using bootstrap css ans Less pre-processing.
 
+Weather Report: http://http://openweathermap.org/.
+
 To-do:
-- [ ] all above.
+- [ ] show map on click on photo.

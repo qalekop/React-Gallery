@@ -13,21 +13,36 @@ var Gallery = React.createClass({
 
     getInitialState() {
         return {
-            title: '... и о погоде:'
+            title: '... и о погоде:',
+            content: {
+                source: '',
+                alt: '',
+                address: 'In a galaxy far far away...',
+                index: -1
+            },
+            coords: {
+                empty: true,
+                lat: 0,
+                lng: 0
+            }
         };
     },
 
     componentDidMount() {
-        // todo fetch initial state
+        this.nextImage('next');
     },
 
     nextImage(direction) {
-        console.log('*** nextImage: ' + direction);
-        //todo: get next/prev image from server, i.e. get new img src, replace it etc
-        $.get('/image/' + direction,
+        var self = this;
+        $.get('/image/',
+            {dir: direction, index: self.state.content.index},
             function(data) {
-                console.log(data);
-            }
+                self.setState({
+                    content: {source: data.source, alt: data.alt, index: data.index, address: data.address},
+                    coords: {empty: data.empty, lat: data.lat, lng: data.lng}
+                });
+            },
+            "json"
         );
     }
 
@@ -36,15 +51,24 @@ var Gallery = React.createClass({
             <div>
                 <h1>{this.state.title}</h1>
 
-                <div className="row"><Address address='default address'/></div>
+                <div className="row"><Address address={this.state.content.address}/></div>
 
                 <div className="row">
                     <Button direction="previous" onClick={this.nextImage}/>
-                    <Content/>
+                    <Content
+                        source={this.state.content.source}
+                        alt={this.state.content.alt}
+                    />
                     <Button direction="next" onClick={this.nextImage}/>
                 </div>
 
-                <div className="row"><Weather/></div>
+                <div className="row">
+                    <Weather
+                        empty={this.state.coords.empty}
+                        lat={this.state.coords.lat}
+                        lng={this.state.coords.lng}
+                    />
+                </div>
             </div>
         );
     }

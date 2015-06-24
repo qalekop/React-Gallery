@@ -7,7 +7,7 @@ var React = require('react');
 var Address = React.createClass({
     render(){
         return(
-            <div className="col-md-8 col-md-offset-2"><h2>{this.props.address}</h2></div>
+            <div className="col-md-8 col-md-offset-2"><h4>{this.props.address}</h4></div>
         )
     }
 });

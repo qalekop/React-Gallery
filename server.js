@@ -46,7 +46,21 @@ app.get('/', function (req, res) {
     res.sendFile('index.html', {root: __dirname});
 });
 
-app.get("/image/:dir", function(req, res) {
-    var dir = req.params.dir;
-    console.log('*** dir=' + dir);
+app.get("/image/", function(req, res) {
+    var i = Number(req.query.index) + (req.query.dir == 'next' ? 1 : -1);
+    if (i < 0) {
+        i = images.length - 1;
+    } else if (i >= images.length) {
+        i = 0;
+    }
+    var image = images[i];
+    res.json({
+        source: image.name,
+        alt: image.endroit,
+        index: i,
+        address: image.endroit,
+        empty: !image.waitForName,
+        lat: image.latitude,
+        lng: image.longitude
+    });
 });
