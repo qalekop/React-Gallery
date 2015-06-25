@@ -3,6 +3,19 @@
   text-align: center;
   margin: 20px auto;
 }
+.image-holder {
+  min-width: 500px;
+  height: 281px;
+}
+.image-holder p {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1000;
+}
+#photo {
+  box-shadow: -10px 10px 20px -10px rgba(0, 0, 0, 0.75);
+}
 .triangle-common {
   margin-top: 115.5px;
   border-top: 25px solid transparent;
@@ -16,12 +29,18 @@
 }
 .triangle-left:hover {
   border-right: 50px solid #b2cccc;
-  cursor: pointer;
 }
 .triangle-right:hover {
   border-left: 50px solid #b2cccc;
-  cursor: pointer;
 }
-.container img {
-  box-shadow: -10px 10px 20px -10px rgba(0, 0, 0, 0.75);
+#map {
+  width: 500px;
+  height: 281px;
+  margin: 0 auto;
+}
+#weather {
+  line-height: 50px;
+}
+.clickable {
+  cursor: pointer;
 }
