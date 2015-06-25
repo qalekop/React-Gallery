@@ -58,6 +58,9 @@ var Gallery = React.createClass({
                     <Content
                         source={this.state.content.source}
                         alt={this.state.content.alt}
+                        empty={this.state.coords.empty}
+                        lat={this.state.coords.lat}
+                        lng={this.state.coords.lng}
                     />
                     <Button direction="next" onClick={this.nextImage}/>
                 </div>

@@ -12,7 +12,7 @@ var Button = React.createClass({
 
 
     render(){
-        var cn = 'triangle-common triangle-' + (this.props.direction == 'next' ? 'right' : 'left');
+        var cn = 'triangle-common triangle-' + (this.props.direction == 'next' ? 'right' : 'left') + ' clickable';
         return(
             <div className="col-md-2"><div className={cn} onClick={this.handleClick}></div></div>
         );

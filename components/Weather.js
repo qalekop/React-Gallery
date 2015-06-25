@@ -3,7 +3,7 @@
  */
 
 var React = require('react');
-var openWeatherURL = 'http://api.openweathermap.org/data/2.5/weather?';
+var openWeatherURL = 'http://api.openweathermap.org/data/2.5/weather';
 var placeHolder = 'Темна вода в облацех...';
 
 var Weather = React.createClass({
