@@ -8,7 +8,7 @@ var React = require('react');
 var Address = React.createClass({displayName: "Address",
     render:function(){
         return(
-            React.createElement("div", {className: "col-md-8 col-md-offset-2"}, React.createElement("h2", null, this.props.address))
+            React.createElement("div", {className: "col-md-8 col-md-offset-2"}, React.createElement("h4", null, this.props.address))
         )
     }
 });
@@ -23,10 +23,16 @@ module.exports = Address;
 var React = require('react');
 
 var Button = React.createClass({displayName: "Button",
+
+    handleClick:function(){
+        this.props.onClick(this.props.direction);
+    },
+
+
     render:function(){
-        var dir = this.props.direction == 'next' ? 'triangle-right' : 'triangle-left';
+        var cn = 'triangle-common triangle-' + (this.props.direction == 'next' ? 'right' : 'left') + ' clickable';
         return(
-            React.createElement("div", {className: "col-md-2"}, React.createElement("div", {id: dir}))
+            React.createElement("div", {className: "col-md-2"}, React.createElement("div", {className: cn, onClick: this.handleClick}))
         );
     }
 });
@@ -41,9 +47,61 @@ module.exports = Button;
 var React = require('react');
 
 var Content = React.createClass({displayName: "Content",
+
+    getInitialState:function() {
+        return {
+            isMapVisible: false
+        }
+    },
+
+    handleClick:function(){
+        if (this.props.empty) return;
+
+        $('#picture').toggleClass('hidden');
+        $('#map').toggleClass('hidden');
+        if (this.state.isMapVisible) {
+            this.setState({isMapVisible: false});
+        } else {
+            this.setState({isMapVisible: true});
+            var map = new GMaps({
+                el: '#map',
+                lat: this.props.lat,
+                lng: this.props.lng
+            });
+
+            map.addMarker({
+                lat: this.props.lat,
+                lng: this.props.lng
+            });
+        }
+    },
+
+    componentWillReceiveProps:function() {
+        $('#picture').removeClass('hidden');
+        $('#map').addClass('hidden');
+        this.setState({isMapVisible: false});
+    },
+
+    componentDidUpdate:function(){
+        var image = '';
+        if (this.props.source) {
+            image = '<img src="/assets/gallery/' + this.props.source + '" alt='
+                + (!!this.props.alt ? ('"' + this.props.alt + '"') : '') + ' id="photo"/>';
+            $("#picture").empty().append(image);
+        }
+    },
+
     render:function(){
+        console.log('Content.render');
+        var className = 'col-md-8 image-holder';
+        if (!this.props.empty) className += ' clickable';
+        // todo odd onClick only for 'non-empty' content?
         return(
-            React.createElement("div", {className: "col-md-8"}, React.createElement("img", {src: "./public/assets/gallery/p1000101.jpg", width: "500", height: "281", alt: "Annecy"}))
+            React.createElement("div", {className: className, onClick: this.handleClick}, 
+                React.createElement("p", null, "Loading..."), 
+                React.createElement("div", {id: "picture"}), 
+                React.createElement("div", {id: "map", className: "hidden"})
+            )
         );
     }
 });
@@ -65,23 +123,66 @@ var Content = require('./Content');
 var Gallery = React.createClass({displayName: "Gallery",
 
     getInitialState:function() {
-        return null;
+        return {
+            title: '... и о погоде:',
+            content: {
+                source: '',
+                alt: '',
+                address: 'In a galaxy far far away...',
+                index: -1
+            },
+            coords: {
+                empty: true,
+                lat: 0,
+                lng: 0
+            }
+        };
+    },
+
+    componentDidMount:function() {
+        this.nextImage('next');
+    },
+
+    nextImage:function(direction) {
+        var self = this;
+        $.get('/image/',
+            {dir: direction, index: self.state.content.index},
+            function(data) {
+                self.setState({
+                    content: {source: data.source, alt: data.alt, index: data.index, address: data.address},
+                    coords: {empty: data.empty, lat: data.lat, lng: data.lng}
+                });
+            },
+            "json"
+        );
     }
 
     , render:function() {
         return (
             React.createElement("div", null, 
-                React.createElement("h1", null, "... и о погоде:"), 
+                React.createElement("h1", null, this.state.title), 
 
-                React.createElement("div", {className: "row"}, React.createElement(Address, {address: "default address"})), 
+                React.createElement("div", {className: "row"}, React.createElement(Address, {address: this.state.content.address})), 
 
                 React.createElement("div", {className: "row"}, 
-                    React.createElement(Button, {direction: "previous"}), 
-                    React.createElement(Content, null), 
-                    React.createElement(Button, {direction: "next"})
+                    React.createElement(Button, {direction: "previous", onClick: this.nextImage}), 
+                    React.createElement(Content, {
+                        source: this.state.content.source, 
+                        alt: this.state.content.alt, 
+                        empty: this.state.coords.empty, 
+                        lat: this.state.coords.lat, 
+                        lng: this.state.coords.lng}
+                    ), 
+                    React.createElement(Button, {direction: "next", onClick: this.nextImage})
                 ), 
 
-                React.createElement("div", {className: "row"}, React.createElement(Weather, null))
+                React.createElement("div", {className: "row"}, 
+                    React.createElement(Weather, {
+                        empty: this.state.coords.empty, 
+                        lat: this.state.coords.lat, 
+                        lng: this.state.coords.lng}
+                    )
+                )
             )
         );
     }
@@ -95,11 +196,35 @@ module.exports = Gallery;
  */
 
 var React = require('react');
+var openWeatherURL = 'http://api.openweathermap.org/data/2.5/weather';
+var placeHolder = 'Темна вода в облацех...';
 
 var Weather = React.createClass({displayName: "Weather",
+
+
+    componentDidUpdate:function(){
+        var $weather = $("#weather");
+        $weather.empty();
+        if (this.props.empty) {
+            $weather.append(placeHolder);
+        } else {
+            var self = this;
+            $.get(openWeatherURL,
+                {lat: self.props.lat, lon: self.props.lng, units: 'metric', lang: 'fr_FR'},
+                function (data) {
+                    var _weather = data.weather[0];
+                    var weather = '<img src="http://openweathermap.org/img/w/' + _weather.icon + '.png" '
+                        + 'alt="' + _weather.main + '"/>' + _weather.description + '&nbsp;T=' + data.main.temp + '&deg;';
+                    $weather.append(weather);
+                },
+                "json"
+            );
+        }
+    },
+
     render:function() {
         return(
-            React.createElement("div", {className: "col-md-8 col-md-offset-2"}, React.createElement("h2", null, "Темна вода в облацех..."))
+            React.createElement("div", {className: "col-md-8 col-md-offset-2"}, React.createElement("h4", {id: "weather"}, placeHolder))
         )
     }
 });
