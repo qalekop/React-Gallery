@@ -13,7 +13,7 @@ var Content = React.createClass({
     },
 
     handleClick(){
-        if (this.props.empty) return;
+        if (this.props.empty) return; // just in case, no 'onClick' call for empty (see render())
 
         $('#picture').toggleClass('hidden');
         $('#map').toggleClass('hidden');
@@ -50,12 +50,10 @@ var Content = React.createClass({
     },
 
     render(){
-        console.log('Content.render');
         var className = 'col-md-8 image-holder';
         if (!this.props.empty) className += ' clickable';
-        // todo odd onClick only for 'non-empty' content?
         return(
-            <div className={className} onClick={this.handleClick}>
+            <div className={className} onClick={!this.props.empty ? this.handleClick : ""}>
                 <p>Loading...</p>
                 <div id="picture"></div>
                 <div id="map" className="hidden"></div>
