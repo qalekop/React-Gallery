@@ -4,6 +4,8 @@
 
 var React = require('react');
 
+var Picture = require('./Picture')
+
 var Content = React.createClass({
 
     getInitialState() {
@@ -40,24 +42,14 @@ var Content = React.createClass({
         this.setState({isMapVisible: false});
     },
 
-    componentDidUpdate(){
-        var image = '';
-        if (this.props.source) {
-            image = '<img src="/assets/gallery/' + this.props.source + '" alt='
-                + (!!this.props.alt ? ('"' + this.props.alt + '"') : '') + ' id="photo"/>';
-            $("#picture").empty().append(image);
-        }
-    },
 
     render(){
-        console.log('Content.render');
         var className = 'col-md-8 image-holder';
         if (!this.props.empty) className += ' clickable';
-        // todo odd onClick only for 'non-empty' content?
         return(
-            <div className={className} onClick={this.handleClick}>
+            <div className={className} onClick={this.props.empty ? '' : this.handleClick}>
                 <p>Loading...</p>
-                <div id="picture"></div>
+                <Picture src={this.props.source} alt={this.props.alt}/>
                 <div id="map" className="hidden"></div>
             </div>
         );
