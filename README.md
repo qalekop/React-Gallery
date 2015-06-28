@@ -7,9 +7,10 @@ React.js playground. Scenario is as follows:
 * get weather conditions for this place;
 * show place name, image and weather.
 
-Client side is built upon react.js using bootstrap css ans Less pre-processing.
+Client side is built upon react.js with bootstrap css ans Less pre-processing.
 
 Weather Report: http://http://openweathermap.org/.
 
 To-do:
-- [ ] show map on click on photo.
+- [x] show map on click on photo.
+- [ ] make it mobile-friendly ('.col-xs-...').

@@ -97,7 +97,7 @@ var Content = React.createClass({displayName: "Content",
         if (!this.props.empty) className += ' clickable';
         // todo odd onClick only for 'non-empty' content?
         return(
-            React.createElement("div", {className: className, onClick: this.handleClick}, 
+            React.createElement("div", {className: className, onClick: !this.props.empty ? this.handleClick : ""}, 
                 React.createElement("p", null, "Loading..."), 
                 React.createElement("div", {id: "picture"}), 
                 React.createElement("div", {id: "map", className: "hidden"})
