@@ -45,6 +45,13 @@ var Content = React.createClass({
 
     render(){
         var className = 'col-md-8 image-holder';
+        if (!this.props.source) {
+            return(
+                <div className={className}>
+                    <p>Loading...</p>
+                </div>
+            );
+        }
         if (!this.props.empty) className += ' clickable';
         return(
             <div className={className} onClick={this.props.empty ? '' : this.handleClick}>

@@ -14,3 +14,5 @@ Weather Report: http://http://openweathermap.org/.
 To-do:
 - [x] show map on click on photo.
 - [ ] make it mobile-friendly ('.col-xs-...').
+- [x] ignore arrows' clicks until all asynchronous gets are over.
+- [ ] play with Flux.

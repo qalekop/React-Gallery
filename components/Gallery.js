@@ -10,10 +10,12 @@ var Button = require('./Button');
 var Content = require('./Content');
 
 var openWeatherURL = 'http://api.openweathermap.org/data/2.5/weather';
+var holdOnYourHorses;
 
 var Gallery = React.createClass({
 
     getInitialState() {
+        holdOnYourHorses = false;
         return {
             title: '... и о погоде:',
             content: {
@@ -41,14 +43,15 @@ var Gallery = React.createClass({
         this.nextImage('next');
     },
 
-    // todo block until all async gets are over
     nextImage(direction) {
+        if (holdOnYourHorses) return;
+        holdOnYourHorses = true;
+        this.setState({content :{source: ''}, weather: {empty: true}});
         var self = this;
-        self.setState({weather: {empty: true}});
         $.get('/image/',
             {dir: direction, index: self.state.content.index},
             function(data) {
-                console.log('Gallery.nextImage ' + data.empty + '; ' + data.source);
+                console.log('Gallery.nextImage: image=' + data.empty + '; ' + data.source);
 
                 if (!data.empty) {
                     $.get(openWeatherURL,
@@ -57,22 +60,22 @@ var Gallery = React.createClass({
                             var _weather = weatherData.weather[0];
                             console.log("Gallery.nextImage: weather=" + _weather.description);
                             self.setState({
-                                weather: {
-                                    empty: false,
-                                    icon: _weather.icon,
-                                    temp: weatherData.main.temp,
-                                    alt: _weather.main,
-                                    description: _weather.description
-                                }
+                                weather: {empty: false, icon: _weather.icon, temp: weatherData.main.temp, alt: _weather.main, description: _weather.description},
+                                content: {source: data.source, alt: data.alt, index: data.index, address: data.address},
+                                coords: {empty: data.empty, lat: data.lat, lng: data.lng}
                             });
-                       },
+                            holdOnYourHorses = false;
+                        },
                         "json"
                     );
+                } else {
+                    self.setState({
+                        weather: {empty: true},
+                        content: {source: data.source, alt: data.alt, index: data.index, address: data.address},
+                        coords: {empty: data.empty, lat: data.lat, lng: data.lng}
+                    });
+                    holdOnYourHorses = false;
                 }
-                self.setState({
-                    content: {source: data.source, alt: data.alt, index: data.index, address: data.address},
-                    coords: {empty: data.empty, lat: data.lat, lng: data.lng}
-                });
             },
             "json"
         );
