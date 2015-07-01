@@ -10,12 +10,12 @@ var Button = require('./Button');
 var Content = require('./Content');
 
 var openWeatherURL = 'http://api.openweathermap.org/data/2.5/weather';
-var holdOnYourHorses;
+var isContentReady, isAnimationOver;
 
 var Gallery = React.createClass({
 
     getInitialState() {
-        holdOnYourHorses = false;
+        isContentReady = isAnimationOver = true;
         return {
             title: '... и о погоде:',
             content: {
@@ -39,13 +39,24 @@ var Gallery = React.createClass({
         };
     },
 
+    readyToContinue() {
+        return isContentReady && isAnimationOver;
+    },
+
+    startWaiting() {
+        isContentReady = isAnimationOver = false;
+        // timeout value should correspond that of 'fade' animation
+        setTimeout(function(){ isAnimationOver = true}, 500);
+    },
+
     componentDidMount() {
         this.nextImage('next');
     },
 
     nextImage(direction) {
-        if (holdOnYourHorses) return;
-        holdOnYourHorses = true;
+        if (!this.readyToContinue()) return;
+
+        this.startWaiting();
         var self = this;
         $.get('/image/',
             {dir: direction, index: self.state.content.index},
@@ -60,7 +71,7 @@ var Gallery = React.createClass({
                                 content: {source: data.source, alt: data.alt, index: data.index, address: data.address},
                                 coords: {empty: data.empty, lat: data.lat, lng: data.lng}
                             });
-                            holdOnYourHorses = false;
+                            isContentReady = true;
                         },
                         "json"
                     );
@@ -70,7 +81,7 @@ var Gallery = React.createClass({
                         content: {source: data.source, alt: data.alt, index: data.index, address: data.address},
                         coords: {empty: data.empty, lat: data.lat, lng: data.lng}
                     });
-                    holdOnYourHorses = false;
+                    isContentReady = true;
                 }
             },
             "json"

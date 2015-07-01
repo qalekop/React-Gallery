@@ -33,6 +33,8 @@ var Content = React.createClass({
     },
 
     componentWillReceiveProps() {
+        $('#picture').removeClass('hidden');
+        $('#map').addClass('hidden');
         isMapVisible = false;
     },
 

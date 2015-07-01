@@ -80,6 +80,8 @@ var Content = React.createClass({displayName: "Content",
     },
 
     componentWillReceiveProps:function() {
+        $('#picture').removeClass('hidden');
+        $('#map').addClass('hidden');
         isMapVisible = false;
     },
 
@@ -118,12 +120,12 @@ var Button = require('./Button');
 var Content = require('./Content');
 
 var openWeatherURL = 'http://api.openweathermap.org/data/2.5/weather';
-var holdOnYourHorses;
+var isContentReady, isAnimationOver;
 
 var Gallery = React.createClass({displayName: "Gallery",
 
     getInitialState:function() {
-        holdOnYourHorses = false;
+        isContentReady = isAnimationOver = true;
         return {
             title: '... и о погоде:',
             content: {
@@ -147,13 +149,25 @@ var Gallery = React.createClass({displayName: "Gallery",
         };
     },
 
+    readyToContinue:function() {
+        return isContentReady && isAnimationOver;
+    },
+
+    startWaiting:function() {
+        isContentReady = isAnimationOver = false;
+        // timeout value should correspond that of 'fade' animation
+        setTimeout(function(){ isAnimationOver = true}, 500);
+    },
+
     componentDidMount:function() {
         this.nextImage('next');
     },
 
     nextImage:function(direction) {
-        if (holdOnYourHorses) return;
-        holdOnYourHorses = true;
+        console.log('Gallery.nextImage: content=' + isContentReady + '; animation=' + isAnimationOver);
+        if (!this.readyToContinue()) return;
+
+        this.startWaiting();
         var self = this;
         $.get('/image/',
             {dir: direction, index: self.state.content.index},
@@ -168,7 +182,7 @@ var Gallery = React.createClass({displayName: "Gallery",
                                 content: {source: data.source, alt: data.alt, index: data.index, address: data.address},
                                 coords: {empty: data.empty, lat: data.lat, lng: data.lng}
                             });
-                            holdOnYourHorses = false;
+                            isContentReady = true;
                         },
                         "json"
                     );
@@ -178,7 +192,7 @@ var Gallery = React.createClass({displayName: "Gallery",
                         content: {source: data.source, alt: data.alt, index: data.index, address: data.address},
                         coords: {empty: data.empty, lat: data.lat, lng: data.lng}
                     });
-                    holdOnYourHorses = false;
+                    isContentReady = true;
                 }
             },
             "json"
@@ -206,7 +220,6 @@ var Gallery = React.createClass({displayName: "Gallery",
 
                 React.createElement("div", {className: "row"}, 
                     React.createElement(Weather, {
-                        key: this.state.content.source, 
                         empty: this.state.weather.empty, 
                         icon: this.state.weather.icon, 
                         temp: this.state.weather.temp, 
@@ -236,7 +249,6 @@ var Picture = React.createClass({displayName: "Picture",
     },
 
     render:function() {
-        console.log('Picture.render');
         var src = '/assets/gallery/' + this.props.src;
         return (
             React.createElement("div", {id: "picture"}, 
