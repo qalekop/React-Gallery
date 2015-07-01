@@ -5,13 +5,12 @@
 var React = require('react');
 
 var Picture = require('./Picture');
-
+var isMapVisible;
 var Content = React.createClass({
 
     getInitialState() {
-        return {
-            isMapVisible: false
-        }
+        isMapVisible = false;
+        return null;
     },
 
     handleClick(){
@@ -19,10 +18,7 @@ var Content = React.createClass({
 
         $('#picture').toggleClass('hidden');
         $('#map').toggleClass('hidden');
-        if (this.state.isMapVisible) {
-            this.setState({isMapVisible: false});
-        } else {
-            this.setState({isMapVisible: true});
+        if (isMapVisible = !isMapVisible) {
             var map = new GMaps({
                 el: '#map',
                 lat: this.props.lat,
@@ -37,9 +33,7 @@ var Content = React.createClass({
     },
 
     componentWillReceiveProps() {
-        $('#picture').removeClass('hidden');
-        $('#map').addClass('hidden');
-        this.setState({isMapVisible: false});
+        isMapVisible = false;
     },
 
 

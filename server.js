@@ -54,13 +54,16 @@ app.get("/image/", function(req, res) {
         i = 0;
     }
     var image = images[i];
-    res.json({
-        source: image.name,
-        alt: image.endroit,
-        index: i,
-        address: image.endroit,
-        empty: !image.waitForName,
-        lat: image.latitude,
-        lng: image.longitude
-    });
+    //setTimeout(function() {
+            res.json({
+                source: image.name,
+                alt: image.endroit,
+                index: i,
+                address: image.endroit,
+                empty: !image.waitForName,
+                lat: image.latitude,
+                lng: image.longitude
+            });
+        //},
+        //2000);
 });

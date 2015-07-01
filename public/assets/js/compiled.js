@@ -52,13 +52,12 @@ module.exports = Button;
 var React = require('react');
 
 var Picture = require('./Picture');
-
+var isMapVisible;
 var Content = React.createClass({displayName: "Content",
 
     getInitialState:function() {
-        return {
-            isMapVisible: false
-        }
+        isMapVisible = false;
+        return null;
     },
 
     handleClick:function(){
@@ -66,10 +65,7 @@ var Content = React.createClass({displayName: "Content",
 
         $('#picture').toggleClass('hidden');
         $('#map').toggleClass('hidden');
-        if (this.state.isMapVisible) {
-            this.setState({isMapVisible: false});
-        } else {
-            this.setState({isMapVisible: true});
+        if (isMapVisible = !isMapVisible) {
             var map = new GMaps({
                 el: '#map',
                 lat: this.props.lat,
@@ -83,11 +79,9 @@ var Content = React.createClass({displayName: "Content",
         }
     },
 
-    //componentWillReceiveProps() {
-    //    $('#picture').removeClass('hidden');
-    //    $('#map').addClass('hidden');
-    //    this.setState({isMapVisible: false});
-    //},
+    componentWillReceiveProps:function() {
+        isMapVisible = false;
+    },
 
 
     render:function(){
@@ -160,7 +154,6 @@ var Gallery = React.createClass({displayName: "Gallery",
     nextImage:function(direction) {
         if (holdOnYourHorses) return;
         holdOnYourHorses = true;
-        this.setState({content: {source: '', address: ''}, weather: {empty: true}});
         var self = this;
         $.get('/image/',
             {dir: direction, index: self.state.content.index},
@@ -213,6 +206,7 @@ var Gallery = React.createClass({displayName: "Gallery",
 
                 React.createElement("div", {className: "row"}, 
                     React.createElement(Weather, {
+                        key: this.state.content.source, 
                         empty: this.state.weather.empty, 
                         icon: this.state.weather.icon, 
                         temp: this.state.weather.temp, 
@@ -242,6 +236,7 @@ var Picture = React.createClass({displayName: "Picture",
     },
 
     render:function() {
+        console.log('Picture.render');
         var src = '/assets/gallery/' + this.props.src;
         return (
             React.createElement("div", {id: "picture"}, 

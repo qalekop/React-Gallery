@@ -46,7 +46,6 @@ var Gallery = React.createClass({
     nextImage(direction) {
         if (holdOnYourHorses) return;
         holdOnYourHorses = true;
-        this.setState({content: {source: '', address: ''}, weather: {empty: true}});
         var self = this;
         $.get('/image/',
             {dir: direction, index: self.state.content.index},
