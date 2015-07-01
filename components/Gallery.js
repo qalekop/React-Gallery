@@ -46,19 +46,16 @@ var Gallery = React.createClass({
     nextImage(direction) {
         if (holdOnYourHorses) return;
         holdOnYourHorses = true;
-        this.setState({content :{source: ''}, weather: {empty: true}});
+        this.setState({content: {source: '', address: ''}, weather: {empty: true}});
         var self = this;
         $.get('/image/',
             {dir: direction, index: self.state.content.index},
             function(data) {
-                console.log('Gallery.nextImage: image=' + data.empty + '; ' + data.source);
-
                 if (!data.empty) {
                     $.get(openWeatherURL,
                         {lat: data.lat, lon: data.lng, units: 'metric', lang: 'fr_FR'},
                         function (weatherData) {
                             var _weather = weatherData.weather[0];
-                            console.log("Gallery.nextImage: weather=" + _weather.description);
                             self.setState({
                                 weather: {empty: false, icon: _weather.icon, temp: weatherData.main.temp, alt: _weather.main, description: _weather.description},
                                 content: {source: data.source, alt: data.alt, index: data.index, address: data.address},

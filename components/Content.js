@@ -4,7 +4,7 @@
 
 var React = require('react');
 
-var Picture = require('./Picture')
+var Picture = require('./Picture');
 
 var Content = React.createClass({
 
@@ -46,16 +46,15 @@ var Content = React.createClass({
     render(){
         var className = 'col-md-8 image-holder';
         if (!this.props.source) {
-            return(
+            return (
                 <div className={className}>
                     <p>Loading...</p>
                 </div>
             );
         }
         if (!this.props.empty) className += ' clickable';
-        return(
+        return (
             <div className={className} onClick={this.props.empty ? '' : this.handleClick}>
-                <p>Loading...</p>
                 <Picture src={this.props.source} alt={this.props.alt}/>
                 <div id="map" className="hidden"></div>
             </div>

@@ -6,7 +6,6 @@ var React = require('react');
 var placeHolder = 'Темна вода в облацех...';
 
 var Weather = React.createClass({
-//<div className="col-md-8 col-md-offset-2"><h4 id="weather">{placeHolder}</h4></div>
 
     render() {
         if (!this.props.empty) {

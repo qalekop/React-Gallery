@@ -2,19 +2,26 @@
  * Created by alexeikopylov on 27.06.15.
  */
 
-var React = require('react');
+var React = require('react/addons');
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Picture = React.createClass({
 
-     render() {
-         if (!this.props.src) return null;
+    propTypes: {
+        src: React.PropTypes.string.isRequired
+    },
 
-         var src = '/assets/gallery/' + this.props.src;
-        return(
+    render() {
+        var src = '/assets/gallery/' + this.props.src;
+        return (
             <div id="picture">
-                <img src={src}
-                     alt={!!this.props.alt ? this.props.alt : ''}
-                     id="photo"/>
+                <ReactCSSTransitionGroup transitionName="fade" transitionLeave={false}>
+                    <img src={src}
+                         alt={!!this.props.alt ? this.props.alt : ''}
+                         id="photo"
+                         key={this.props.src}
+                    />
+                </ReactCSSTransitionGroup>
             </div>
         );
     }
